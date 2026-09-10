@@ -7,6 +7,26 @@
  * real ones. Run via: wp eval-file local-preview/seed.php
  */
 
+/**
+ * Exact-title lookup across any post type — get_page_by_title() was fully
+ * deprecated in WP 6.2 (unreliable LIKE-based matching); WP_Query's exact
+ * 'title' parameter is the replacement WordPress itself recommends.
+ */
+function ndingi_find_by_title( $title, $post_type ) {
+	$query = new WP_Query(
+		array(
+			'post_type'              => $post_type,
+			'title'                  => $title,
+			'post_status'            => 'any',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		)
+	);
+	return $query->have_posts() ? $query->posts[0] : null;
+}
+
 function ndingi_seed_placeholder_image( $label, $hex_bg = '#c8720f', $hex_fg = '#fdf6e8' ) {
 	if ( ! function_exists( 'imagecreatetruecolor' ) ) {
 		return 0;
@@ -50,8 +70,45 @@ function ndingi_seed_placeholder_image( $label, $hex_bg = '#c8720f', $hex_fg = '
 	return $attachment_id;
 }
 
+/**
+ * Attach a real photo (not a generated placeholder) as a page's featured
+ * image, by page ID — used for the three programme pages' client-supplied
+ * photographs. Takes an ID rather than a slug because these pages are
+ * nested under Our Work, so their path isn't just their own slug.
+ * Safe to re-run: does nothing once a featured image is set.
+ */
+function ndingi_attach_programme_photo( $page_id, $file_path, $title ) {
+	if ( ! $page_id || has_post_thumbnail( $page_id ) ) {
+		return;
+	}
+	if ( ! file_exists( $file_path ) ) {
+		echo "  (skipping photo for page {$page_id} \u{2014} file not found: {$file_path})\n";
+		return;
+	}
+
+	$filetype = wp_check_filetype( basename( $file_path ) );
+	$upload   = wp_upload_bits( basename( $file_path ), null, file_get_contents( $file_path ) );
+	if ( ! empty( $upload['error'] ) ) {
+		echo "  (upload failed for page {$page_id}: {$upload['error']})\n";
+		return;
+	}
+
+	$attachment_id = wp_insert_attachment(
+		array(
+			'post_mime_type' => $filetype['type'],
+			'post_title'     => $title,
+			'post_status'    => 'inherit',
+		),
+		$upload['file'],
+		$page_id
+	);
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );
+	set_post_thumbnail( $page_id, $attachment_id );
+}
+
 function ndingi_seed_page( $title, $content, $parent_id = 0, $template = '', $meta = array() ) {
-	$existing = get_page_by_title( $title, OBJECT, 'page' );
+	$existing = ndingi_find_by_title( $title, 'page' );
 	if ( $existing ) {
 		return $existing->ID;
 	}
@@ -136,7 +193,7 @@ ndingi_seed_page(
 
 $our_work_id = ndingi_seed_page( 'Our Work', '', 0, 'page-our-work.php' );
 
-ndingi_seed_page(
+$education_id = ndingi_seed_page(
 	'Education',
 	"<p>We honour Archbishop Raphael Simon Ndingi Mwana\u{2019}a Nzeki\u{2019}s legacy by expanding access to education and lifelong learning that empowers individuals and strengthens communities.</p>\n<p>Our work creates opportunities for individuals to access education while equipping communities with practical knowledge and skills that promote self-reliance, sustainable livelihoods, and economic resilience.</p>\n<p>We believe education extends beyond the classroom. By fostering learning, innovation, and skills development, we enable individuals to realise their potential, improve their quality of life, and contribute meaningfully to the development of their communities and the nation.</p>",
 	$our_work_id,
@@ -144,7 +201,7 @@ ndingi_seed_page(
 	array( 'ndingi_card_icon' => 'education', 'ndingi_card_blurb' => 'Expanding access to education and lifelong learning that builds self-reliance and economic resilience.' )
 );
 
-ndingi_seed_page(
+$livelihoods_id = ndingi_seed_page(
 	'Sustainable Livelihoods',
 	'<p>We believe lasting transformation is achieved when communities are at the centre of their own development. Our approach fosters meaningful participation, ensuring that communities actively shape, implement, and sustain the initiatives that improve their lives.</p>
 <p>Through collaborative initiatives, including community-based livelihood projects such as apiculture, we equip individuals and groups with practical skills, knowledge, and enterprise opportunities that strengthen self-reliance and economic resilience. By combining capacity strengthening, innovation, and local ownership, we enable communities to build sustainable livelihoods while contributing to environmental conservation.</p>
@@ -154,7 +211,7 @@ ndingi_seed_page(
 	array( 'ndingi_card_icon' => 'sustainable-livelihoods', 'ndingi_card_blurb' => 'Community-led initiatives such as apiculture that strengthen self-reliance and economic resilience.' )
 );
 
-ndingi_seed_page(
+$water_id = ndingi_seed_page(
 	'Water & Ecosystem Management',
 	'<p>We advance integrated approaches to water, land, and ecosystem management that strengthen community resilience and support sustainable livelihoods. Our programme includes agroforestry, ecosystem restoration, improved access to safe water, sustainable irrigation, and climate-smart agriculture.</p>
 <p>Through initiatives such as our Longonot water project, tree planting, and the cultivation of high-value crops, we help restore degraded landscapes, improve soil and water resources, enhance food security, and create economic opportunities for communities. By protecting natural resources today, we contribute to a healthier environment and a more resilient future for generations to come.</p>',
@@ -162,6 +219,12 @@ ndingi_seed_page(
 	'page-programme.php',
 	array( 'ndingi_card_icon' => 'water-ecosystem-management', 'ndingi_card_blurb' => 'Agroforestry, ecosystem restoration, and safe water access, including the Longonot water project.' )
 );
+
+echo "Attaching programme photographs…\n";
+$programme_media_dir = __DIR__ . '/media/programmes';
+ndingi_attach_programme_photo( $education_id, $programme_media_dir . '/education.jpg', 'Education' );
+ndingi_attach_programme_photo( $livelihoods_id, $programme_media_dir . '/livelihoods.jpg', 'Sustainable Livelihoods' );
+ndingi_attach_programme_photo( $water_id, $programme_media_dir . '/water.jpg', 'Water & Ecosystem Management' );
 
 ndingi_seed_page( 'Partners', '', 0, 'page-partners.php' );
 
@@ -199,7 +262,7 @@ $core_values = array(
 );
 foreach ( $core_values as $i => $value ) {
 	list( $name, $description ) = $value;
-	if ( get_page_by_title( $name, OBJECT, 'core_value' ) ) {
+	if ( ndingi_find_by_title( $name, 'core_value' ) ) {
 		continue;
 	}
 	wp_insert_post(
@@ -229,7 +292,7 @@ $roles = array(
 );
 foreach ( $rosters as $roster_slug => $names ) {
 	foreach ( $names as $i => $name ) {
-		if ( get_page_by_title( $name, OBJECT, 'team_member' ) ) {
+		if ( ndingi_find_by_title( $name, 'team_member' ) ) {
 			continue;
 		}
 		$member_id = wp_insert_post(
@@ -251,7 +314,7 @@ foreach ( $rosters as $roster_slug => $names ) {
 }
 
 echo "Seeding a sample news post…\n";
-if ( ! get_page_by_title( 'Sample News Post — Replace With Real Content', OBJECT, 'post' ) ) {
+if ( ! ndingi_find_by_title( 'Sample News Post — Replace With Real Content', 'post' ) ) {
 	$post_id = wp_insert_post(
 		array(
 			'post_type'    => 'post',
@@ -267,7 +330,7 @@ if ( ! get_page_by_title( 'Sample News Post — Replace With Real Content', OBJE
 }
 
 echo "Seeding a sample publication…\n";
-if ( ! get_page_by_title( 'Sample Publication — Replace With Real Content', OBJECT, 'publication' ) ) {
+if ( ! ndingi_find_by_title( 'Sample Publication — Replace With Real Content', 'publication' ) ) {
 	$pub_id = wp_insert_post(
 		array(
 			'post_type'    => 'publication',

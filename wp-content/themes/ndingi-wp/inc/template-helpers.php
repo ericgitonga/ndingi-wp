@@ -49,14 +49,26 @@ function ndingi_link_card( $href, $title, $blurb, $icon_key = '' ) {
  * A modal-trigger card tile (used by Our Work's programme grid and Who We
  * Are's detail grid) — opens a shared dialog populated from a matching
  * <template data-card-content> block. See assets/js/modal.js.
+ *
+ * When $photo_html is given (a <img> tag, e.g. from get_the_post_thumbnail())
+ * the card shows that photo with the title/blurb underneath instead of an
+ * icon tile — used by Our Work's programme cards.
  */
-function ndingi_modal_card( $key, $title, $blurb, $icon_key = '' ) {
+function ndingi_modal_card( $key, $title, $blurb, $icon_key = '', $photo_html = '' ) {
 	$template_id = 'card-content-' . sanitize_html_class( $key );
 	?>
-	<button type="button" class="card-tile" data-card-trigger="<?php echo esc_attr( $template_id ); ?>" aria-haspopup="dialog">
-		<?php ndingi_icon( $icon_key ); ?>
-		<span class="card-tile__title"><?php echo esc_html( $title ); ?></span>
-		<span class="card-tile__blurb"><?php echo esc_html( $blurb ); ?></span>
+	<button type="button" class="card-tile<?php echo $photo_html ? ' card-tile--photo' : ''; ?>" data-card-trigger="<?php echo esc_attr( $template_id ); ?>" aria-haspopup="dialog">
+		<?php if ( $photo_html ) : ?>
+			<?php echo $photo_html; // phpcs:ignore -- pre-built <img> markup from get_the_post_thumbnail(). ?>
+			<span class="card-tile__body">
+				<span class="card-tile__title"><?php echo esc_html( $title ); ?></span>
+				<span class="card-tile__blurb"><?php echo esc_html( $blurb ); ?></span>
+			</span>
+		<?php else : ?>
+			<?php ndingi_icon( $icon_key ); ?>
+			<span class="card-tile__title"><?php echo esc_html( $title ); ?></span>
+			<span class="card-tile__blurb"><?php echo esc_html( $blurb ); ?></span>
+		<?php endif; ?>
 	</button>
 	<?php
 }

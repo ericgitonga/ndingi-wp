@@ -23,7 +23,8 @@ $children = ndingi_get_child_pages( get_the_ID() );
 		<?php foreach ( $children as $child ) :
 			$icon  = get_post_meta( $child->ID, 'ndingi_card_icon', true );
 			$blurb = get_post_meta( $child->ID, 'ndingi_card_blurb', true );
-			ndingi_modal_card( $child->post_name, $child->post_title, $blurb, $icon );
+			$photo = has_post_thumbnail( $child ) ? get_the_post_thumbnail( $child, array( 400, 267 ), array( 'alt' => '' ) ) : '';
+			ndingi_modal_card( $child->post_name, $child->post_title, $blurb, $icon, $photo );
 		endforeach; ?>
 	</div>
 

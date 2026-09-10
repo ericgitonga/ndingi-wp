@@ -36,6 +36,20 @@ Page copy that was plain paragraphs in the original (Mission, Vision, programme 
 Partners' advisor list) is just each WordPress Page's own block-editor content here — no custom
 fields needed for prose an editor would normally just write directly on the page.
 
+Education, Sustainable Livelihoods, and Water & Ecosystem Management each carry a real
+photograph (the client's own) as their featured image, shown on their Our Work card — see
+`local-preview/seed.php`'s `ndingi_attach_programme_photo()` and `local-preview/media/`.
+
+### URL structure — deliberately nested
+
+Mission, Vision, Core Values, People, News, Publications, and the three programme pages are set
+up as **child pages** of their hub (About/Who We Are/Our Work/Resources), so their URLs nest —
+`/about/who-we-are/`, `/our-work/education/`, `/resources/news/` — rather than the original
+Next.js site's flat `/who-we-are`, `/education`, `/news`. This was a deliberate choice (confirmed
+with the client 2026-09-10): it's the idiomatic WordPress way to let a hub page list its
+children automatically, and matches how WordPress installs normally behave. Don't "fix" this
+back to flat URLs without checking first — it's expected, not a bug.
+
 ## Local preview (no Docker, no MySQL)
 
 ```bash
