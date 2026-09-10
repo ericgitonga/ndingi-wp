@@ -188,6 +188,19 @@ dd {
 	width: 12rem;
 }
 
+.prominent-logo {
+	display: block;
+	margin: 0 auto;
+	height: auto;
+	width: 18rem;
+}
+
+@media (min-width: 640px) {
+	.prominent-logo {
+		width: 24rem;
+	}
+}
+
 .nav-toggle {
 	display: flex;
 	height: 2.25rem;

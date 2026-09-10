@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 — 2026-09-10
+
+Home and About now show a large, centred logo above their content (new
+`template-parts/prominent-logo.php`), matching the same change on the Next.js site —
+every other page keeps the logo in the header navbar only. About also drops its
+"About" heading/text entirely: just the logo, then the Who We Are and People cards.
+
 ## 0.2.0 — 2026-09-10
 
 Our Work's programme cards (`/our-work/` and the homepage's preview grid) now show the client's
