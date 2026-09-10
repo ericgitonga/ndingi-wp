@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 — 2026-09-10
+
+Moved Home's prominent logo into the orange hero section, directly above "Empowering
+Communities…" — the hero now starts immediately after the navbar again, matching client
+feedback (and the same fix on the Next.js site).
+
 ## 0.3.0 — 2026-09-10
 
 Home and About now show a large, centred logo above their content (new

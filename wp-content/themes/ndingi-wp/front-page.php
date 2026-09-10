@@ -33,12 +33,9 @@ $our_work_page = get_page_by_path( 'our-work' );
 $programme_pages = $our_work_page ? ndingi_get_child_pages( $our_work_page->ID ) : array();
 ?>
 
-<div class="wrap-5xl" style="padding-top:2.5rem;text-align:center;">
-	<?php get_template_part( 'template-parts/prominent-logo' ); ?>
-</div>
-
 <section class="hero">
 	<div class="hero__inner">
+		<?php get_template_part( 'template-parts/prominent-logo' ); ?>
 		<h1><?php echo esc_html( $hero_heading ); ?></h1>
 		<p><?php echo esc_html( $hero_subtext ); ?></p>
 		<div class="hero__actions">
