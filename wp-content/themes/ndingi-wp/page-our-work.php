@@ -1,0 +1,36 @@
+<?php
+/**
+ * Template Name: Our Work Hub
+ * Port of ndingi's src/app/our-work/page.tsx + ProgrammeGrid.tsx — each
+ * programme page (child of this one) opens in a modal showing its own
+ * content, rather than navigating away.
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+get_header();
+$children = ndingi_get_child_pages( get_the_ID() );
+?>
+<div class="wrap-4xl">
+	<h1 class="page-title"><?php the_title(); ?></h1>
+	<div class="prose" style="max-width:42rem;">
+		<p>Three programme areas guided by Archbishop Ndingi&rsquo;s enduring legacy. Select a
+		programme to learn more.</p>
+	</div>
+
+	<div class="card-grid card-grid--3" id="our-work-grid">
+		<?php foreach ( $children as $child ) :
+			$icon  = get_post_meta( $child->ID, 'ndingi_card_icon', true );
+			$blurb = get_post_meta( $child->ID, 'ndingi_card_blurb', true );
+			ndingi_modal_card( $child->post_name, $child->post_title, $blurb, $icon );
+		endforeach; ?>
+	</div>
+
+	<?php foreach ( $children as $child ) :
+		ndingi_modal_card_content( $child->post_name, $child->post_title, apply_filters( 'the_content', $child->post_content ) );
+	endforeach; ?>
+
+	<?php ndingi_render_card_dialog( 'our-work-grid' ); ?>
+</div>
+<?php get_footer(); ?>

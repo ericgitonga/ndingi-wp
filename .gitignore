@@ -1,0 +1,8 @@
+# Local WordPress core + SQLite runtime used only for previewing the theme/
+# plugin on a machine with no MySQL/Docker — WordPress core itself is never
+# part of this repo's deliverable (the theme + plugin are).
+.wp-runtime/
+
+# OS/editor cruft
+.DS_Store
+*.swp

@@ -1,0 +1,110 @@
+<?php
+/**
+ * Small render helpers shared across page templates — kept here instead of
+ * duplicated per-template, same intent as ndingi's shared components
+ * (Breadcrumb.tsx, DetailGrid.tsx/ProgrammeGrid.tsx/TeamGrid.tsx card+dialog
+ * markup, formatDate.ts).
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * @param array $items Each item: ['label' => string, 'href' => string|null].
+ *                      Matches Breadcrumb.tsx's BreadcrumbItem shape.
+ */
+function ndingi_breadcrumb( array $items ) {
+	echo '<nav class="breadcrumb" aria-label="Breadcrumb">';
+	foreach ( $items as $i => $item ) {
+		echo '<span class="breadcrumb__item">';
+		if ( $i > 0 ) {
+			echo '<span class="breadcrumb__sep" aria-hidden="true">/</span>';
+		}
+		if ( ! empty( $item['href'] ) ) {
+			printf( '<a href="%s">%s</a>', esc_url( $item['href'] ), esc_html( $item['label'] ) );
+		} else {
+			printf( '<span class="breadcrumb__current">%s</span>', esc_html( $item['label'] ) );
+		}
+		echo '</span>';
+	}
+	echo '</nav>';
+}
+
+/**
+ * A link-card tile (used by hub pages like About/Resources) — a plain
+ * anchor to another page, not a modal trigger.
+ */
+function ndingi_link_card( $href, $title, $blurb, $icon_key = '' ) {
+	?>
+	<a class="card-tile" href="<?php echo esc_url( $href ); ?>">
+		<?php ndingi_icon( $icon_key ); ?>
+		<span class="card-tile__title"><?php echo esc_html( $title ); ?></span>
+		<span class="card-tile__blurb"><?php echo esc_html( $blurb ); ?></span>
+	</a>
+	<?php
+}
+
+/**
+ * A modal-trigger card tile (used by Our Work's programme grid and Who We
+ * Are's detail grid) — opens a shared dialog populated from a matching
+ * <template data-card-content> block. See assets/js/modal.js.
+ */
+function ndingi_modal_card( $key, $title, $blurb, $icon_key = '' ) {
+	$template_id = 'card-content-' . sanitize_html_class( $key );
+	?>
+	<button type="button" class="card-tile" data-card-trigger="<?php echo esc_attr( $template_id ); ?>" aria-haspopup="dialog">
+		<?php ndingi_icon( $icon_key ); ?>
+		<span class="card-tile__title"><?php echo esc_html( $title ); ?></span>
+		<span class="card-tile__blurb"><?php echo esc_html( $blurb ); ?></span>
+	</button>
+	<?php
+}
+
+/**
+ * The hidden <template> holding one modal card's title + body, read by
+ * assets/js/modal.js when its matching trigger is clicked.
+ */
+function ndingi_modal_card_content( $key, $title, $body_html ) {
+	$template_id = 'card-content-' . sanitize_html_class( $key );
+	?>
+	<template id="<?php echo esc_attr( $template_id ); ?>">
+		<h2 class="section-title"><?php echo esc_html( $title ); ?></h2>
+		<div class="dialog-body"><?php echo $body_html; // phpcs:ignore -- pre-rendered trusted template content. ?></div>
+	</template>
+	<?php
+}
+
+/**
+ * The single shared <dialog> that all modal-card triggers on a page open
+ * into. Only one is needed per page — its content is swapped per click.
+ */
+function ndingi_render_card_dialog( $grid_id ) {
+	?>
+	<dialog class="ndingi-dialog" data-card-dialog="<?php echo esc_attr( $grid_id ); ?>">
+		<button type="button" class="dialog-close" data-close-modal aria-label="Close">&times;</button>
+		<div data-dialog-content></div>
+	</dialog>
+	<?php
+}
+
+/**
+ * Same date formatting as ndingi's formatDate.ts (en-GB, long style).
+ */
+function ndingi_format_date( $mysql_date ) {
+	$timestamp = strtotime( $mysql_date );
+	return $timestamp ? date_i18n( 'j F Y', $timestamp ) : '';
+}
+
+/**
+ * Fetch a Page's rendered content by slug — used to reuse a standalone
+ * page's copy inside a modal (e.g. the Mission page's text, shown again
+ * inside Who We Are's detail grid) without duplicating it.
+ */
+function ndingi_page_content_by_slug( $slug ) {
+	$page = get_page_by_path( $slug );
+	if ( ! $page ) {
+		return '';
+	}
+	return apply_filters( 'the_content', $page->post_content );
+}
