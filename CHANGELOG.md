@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.2 — 2026-09-10
+
+Reverted the logo back to the cream section above the hero — the client felt its colours
+didn't sit well on the orange gradient — but trimmed the hero's top padding so "Empowering
+Communities…" now sits immediately below the logo with no dead space. Matches the same
+revision on the Next.js site.
+
 ## 0.3.1 — 2026-09-10
 
 Moved Home's prominent logo into the orange hero section, directly above "Empowering
