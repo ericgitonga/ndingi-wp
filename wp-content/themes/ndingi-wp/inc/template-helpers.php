@@ -101,6 +101,35 @@ function ndingi_render_card_dialog( $grid_id ) {
 }
 
 /**
+ * Wraps the ndingi-wp-content plugin's ndingi_get_child_pages() so a hub
+ * page degrades to an empty grid instead of a fatal "critical error" white
+ * screen if that plugin is ever deactivated — this exact gap took down
+ * About, Our Work, and Resources in production once already.
+ */
+function ndingi_safe_get_child_pages( $parent_id ) {
+	if ( ! function_exists( 'ndingi_get_child_pages' ) ) {
+		return array();
+	}
+	return ndingi_get_child_pages( $parent_id );
+}
+
+/**
+ * Same fatal-avoidance wrapping as ndingi_safe_get_child_pages() above, for
+ * every other ndingi-wp-content plugin function a template calls directly.
+ */
+function ndingi_safe_get_core_values() {
+	return function_exists( 'ndingi_get_core_values' ) ? ndingi_get_core_values() : array();
+}
+
+function ndingi_safe_get_roster( $roster_slug ) {
+	return function_exists( 'ndingi_get_roster' ) ? ndingi_get_roster( $roster_slug ) : array();
+}
+
+function ndingi_safe_publication_url( $post_id ) {
+	return function_exists( 'ndingi_publication_url' ) ? ndingi_publication_url( $post_id ) : '';
+}
+
+/**
  * Same date formatting as ndingi's formatDate.ts (en-GB, long style).
  */
 function ndingi_format_date( $mysql_date ) {

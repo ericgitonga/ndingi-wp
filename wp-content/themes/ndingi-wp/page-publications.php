@@ -28,7 +28,7 @@ $resources = get_posts(
 	<?php else : ?>
 		<div class="list-card">
 			<?php foreach ( $resources as $resource ) :
-				$href       = ndingi_publication_url( $resource->ID );
+				$href       = ndingi_safe_publication_url( $resource->ID );
 				$link_type  = get_post_meta( $resource->ID, 'ndingi_link_type', true ) ?: 'file';
 				$categories = get_the_terms( $resource->ID, 'publication_category' );
 				$category   = ( $categories && ! is_wp_error( $categories ) ) ? $categories[0]->name : '';

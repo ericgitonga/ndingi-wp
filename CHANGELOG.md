@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.4.0 — 2026-09-12
+
+Fixed the live host reporting About, Our Work, and Resources as missing (500/critical
+error and 404) after the theme + plugin were uploaded: the `ndingi-wp-content` plugin was
+never activated alongside the theme, so every page calling one of its functions
+(`ndingi_get_child_pages()`, `ndingi_get_core_values()`, `ndingi_get_roster()`,
+`ndingi_publication_url()`) hit a PHP fatal error — the homepage only survived because it
+happens to skip that call when Our Work doesn't exist yet. Two changes:
+
+- Every call site now goes through a new `ndingi_safe_get_child_pages()` /
+  `ndingi_safe_get_core_values()` / `ndingi_safe_get_roster()` /
+  `ndingi_safe_publication_url()` wrapper (`inc/template-helpers.php`) that degrades to an
+  empty result instead of a fatal "critical error" white screen if the plugin is ever
+  inactive, plus a red `admin_notices` warning naming exactly which pages depend on it.
+- New **Tools → Ndingi Page Setup** admin page (in the plugin) creates the full page
+  hierarchy — same titles, templates, parents, and real copy as
+  `local-preview/seed.php`, minus its placeholder team members/news/publication — with one
+  click, so a page missing on a host with no WP-CLI/SSH access (like Our Work here) doesn't
+  need creating by hand. Safe to run repeatedly: anything already found by title is left
+  untouched.
+
+Verified against `ndingifoundation.org` directly and reproduced the exact failure (and the
+fix) in the local preview by deactivating the plugin. Also confirmed live that the
+Contact/Donate nav modals open correctly on both desktop and mobile — no code issue found
+there.
+
 ## 0.3.2 — 2026-09-10
 
 Reverted the logo back to the cream section above the hero — the client felt its colours

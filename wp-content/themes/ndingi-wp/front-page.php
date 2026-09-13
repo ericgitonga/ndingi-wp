@@ -30,7 +30,7 @@ $cta_body    = get_post_meta( $front_id, 'ndingi_cta_body', true ) ?: "Join us i
 // fails for a child page) and would silently go stale if a programme is
 // ever added, renamed, or reordered.
 $our_work_page = get_page_by_path( 'our-work' );
-$programme_pages = $our_work_page ? ndingi_get_child_pages( $our_work_page->ID ) : array();
+$programme_pages = $our_work_page ? ndingi_safe_get_child_pages( $our_work_page->ID ) : array();
 ?>
 
 <div class="wrap-5xl" style="padding-top:2.5rem;padding-bottom:1rem;text-align:center;">

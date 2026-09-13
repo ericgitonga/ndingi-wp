@@ -76,10 +76,16 @@ installing Docker or MySQL. On a real host:
    against real MySQL).
 2. Copy `wp-content/themes/ndingi-wp/` and `wp-content/plugins/ndingi-wp-content/` into the
    host's `wp-content/`.
-3. Activate the theme and the plugin from wp-admin.
-4. Recreate the page hierarchy (or ask for the `local-preview/seed.php` structure adapted into a
-   one-time import) and add real content — team members, news, publications, core values — via
-   wp-admin instead of the placeholder/sample entries.
+3. Activate **both** the theme and the plugin from wp-admin — Plugins as well as Appearance.
+   The theme alone isn't enough: About, Our Work, Resources, Who We Are, People, Core Values,
+   and Publications all call functions the plugin defines, and will render empty (with a red
+   admin notice) until it's active. (This exact gap — plugin never activated — is what caused
+   About/Our Work/Resources to go missing on the live site once already; see CHANGELOG 0.4.0.)
+4. Go to **Tools → Ndingi Page Setup** in wp-admin and click "Create / Repair Site Pages" — this
+   creates the full page hierarchy (same titles, templates, and real copy as
+   `local-preview/seed.php`, minus its placeholder content) in one click, no WP-CLI/SSH needed.
+   Safe to re-run any time; it never touches a page that already exists. Then add real content —
+   team members, news, publications, programme photos — via wp-admin.
 5. If the host's default `mail()` is unreliable for the contact form (common on shared hosting),
    install an SMTP plugin (e.g. WP Mail SMTP) pointed at a transactional email provider — no
    theme/plugin code change needed either way, `wp_mail()` already routes through whatever the

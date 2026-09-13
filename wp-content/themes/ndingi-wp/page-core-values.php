@@ -13,7 +13,7 @@ get_header();
 <div class="wrap">
 	<h1 class="page-title"><?php the_title(); ?></h1>
 	<div class="card-grid card-grid--2">
-		<?php foreach ( ndingi_get_core_values() as $value ) : ?>
+		<?php foreach ( ndingi_safe_get_core_values() as $value ) : ?>
 			<div class="advisor-card">
 				<h2 style="font-size:1rem;font-weight:600;color:var(--secondary);text-transform:none;letter-spacing:normal;"><?php echo esc_html( $value->post_title ); ?></h2>
 				<p style="margin-top:0.25rem;font-size:0.875rem;color:var(--fg-80);"><?php echo esc_html( $value->post_excerpt ); ?></p>

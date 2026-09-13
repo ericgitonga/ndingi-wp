@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
-$children = ndingi_get_child_pages( get_the_ID() );
+$children = ndingi_safe_get_child_pages( get_the_ID() );
 ?>
 <div class="wrap">
 	<h1 class="page-title"><?php the_title(); ?></h1>

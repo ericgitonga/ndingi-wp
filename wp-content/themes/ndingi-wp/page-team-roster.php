@@ -17,7 +17,7 @@ $slug_to_roster = array(
 	'board-of-directors' => 'board',
 );
 $roster  = $slug_to_roster[ get_post_field( 'post_name' ) ] ?? 'management';
-$members = ndingi_get_roster( $roster );
+$members = ndingi_safe_get_roster( $roster );
 ?>
 <div class="wrap">
 	<h1 class="page-title"><?php the_title(); ?></h1>

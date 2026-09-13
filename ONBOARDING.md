@@ -15,8 +15,11 @@ content-model mapping and local preview instructions.
 
 - `wp-content/themes/ndingi-wp/` — presentation (templates, CSS, JS).
 - `wp-content/plugins/ndingi-wp-content/` — content model (custom post types, taxonomies,
-  meta boxes, the contact form handler). Kept separate from the theme deliberately — swapping
-  the theme later shouldn't mean losing the content model.
+  meta boxes, the contact form handler, and the Tools → Ndingi Page Setup admin tool). Kept
+  separate from the theme deliberately — swapping the theme later shouldn't mean losing the
+  content model. **Must be active alongside the theme** — several page templates call its
+  functions directly and render empty (with an admin notice) if it isn't; see the theme's
+  `inc/template-helpers.php` `ndingi_safe_*` wrappers and CHANGELOG 0.4.0.
 - `local-preview/` — `setup.sh` (bootstraps a local WordPress + SQLite instance, no
   Docker/MySQL needed) and `seed.php` (sample content, run automatically by `setup.sh` on
   first install).

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
-$children = ndingi_get_child_pages( get_the_ID() );
+$children = ndingi_safe_get_child_pages( get_the_ID() );
 ?>
 <div class="wrap">
 	<?php get_template_part( 'template-parts/prominent-logo' ); ?>

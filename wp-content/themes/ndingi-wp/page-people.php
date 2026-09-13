@@ -24,7 +24,7 @@ $sections = array(
 		<?php foreach ( $sections as $slug => $label ) : ?>
 			<details>
 				<summary><?php echo esc_html( $label ); ?></summary>
-				<?php get_template_part( 'template-parts/team-grid', null, array( 'members' => ndingi_get_roster( $slug ), 'grid_id' => 'people-' . $slug ) ); ?>
+				<?php get_template_part( 'template-parts/team-grid', null, array( 'members' => ndingi_safe_get_roster( $slug ), 'grid_id' => 'people-' . $slug ) ); ?>
 			</details>
 		<?php endforeach; ?>
 	</div>

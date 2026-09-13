@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
-$children = ndingi_get_child_pages( get_the_ID() );
+$children = ndingi_safe_get_child_pages( get_the_ID() );
 ?>
 <div class="wrap">
 	<?php ndingi_breadcrumb( array( array( 'label' => 'About', 'href' => home_url( '/about/' ) ), array( 'label' => 'Who We Are' ) ) ); ?>
@@ -29,7 +29,7 @@ $children = ndingi_get_child_pages( get_the_ID() );
 	<?php foreach ( $children as $child ) :
 		if ( 'core-values' === $child->post_name ) {
 			ob_start();
-			foreach ( ndingi_get_core_values() as $value ) {
+			foreach ( ndingi_safe_get_core_values() as $value ) {
 				printf(
 					'<div><p style="font-weight:500;color:var(--foreground);margin:0;">%s</p><p style="font-size:0.875rem;color:var(--fg-80);margin:0;">%s</p></div>',
 					esc_html( $value->post_title ),

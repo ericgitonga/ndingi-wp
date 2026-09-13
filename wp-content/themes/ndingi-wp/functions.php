@@ -53,3 +53,29 @@ function ndingi_default_nav_links() {
 function ndingi_contact_email() {
 	return apply_filters( 'ndingi_contact_email', 'admin@ndingifoundation.org' );
 }
+
+/**
+ * About, Our Work, Resources, Who We Are, People, Core Values, and
+ * Publications all call functions the ndingi-wp-content plugin defines —
+ * if that plugin isn't active those pages degrade to an empty grid (see
+ * ndingi_safe_get_child_pages() etc. in inc/template-helpers.php) rather
+ * than crashing, but the site is still missing most of its real content.
+ * Surface that loudly in wp-admin instead of leaving it to be found by a
+ * visitor hitting a blank/empty page.
+ */
+function ndingi_check_required_plugin_notice() {
+	if ( function_exists( 'ndingi_get_child_pages' ) ) {
+		return;
+	}
+	?>
+	<div class="notice notice-error">
+		<p>
+			<strong>Ndingi Foundation Content</strong> plugin is not active. Most of this
+			theme's pages (About, Our Work, Resources, Who We Are, People, Core Values,
+			Publications) depend on it and will show as empty until it's activated —
+			see <a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>">Plugins</a>.
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'ndingi_check_required_plugin_notice' );
