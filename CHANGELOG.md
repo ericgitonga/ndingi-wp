@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.4 — 2026-09-15
+
+New **Tools → Ndingi People Import** wp-admin page (same pattern as Ndingi Page Setup) —
+one click imports the real Management Team/Trustees/Board of Management roster (names, roles,
+bios, photos) live from Sanity, for a host with no WP-CLI/SSH access to run it themselves.
+`local-preview/import-real-people.php` is now a thin CLI wrapper around the same
+`ndingi_people_import_run()` the admin page calls, instead of duplicating the logic.
+
+Also fixed version drift: the theme (`style.css`) and plugin (`ndingi-wp-content.php`) header
+`Version:` fields had been stuck at 0.4.0 since three VERSION bumps ago — now synced to match
+`VERSION` on every release, going forward.
+
 ## 0.4.3 — 2026-09-15
 
 New `local-preview/import-real-people.php` — an opt-in sibling to `seed.php` that replaces the
