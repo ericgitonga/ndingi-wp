@@ -140,7 +140,7 @@ function ndingi_page_setup_run() {
 		'',
 		$about_id,
 		'page-people.php',
-		array( 'ndingi_card_icon' => 'people', 'ndingi_card_blurb' => 'Meet our Management Team, Trustees, and Board of Directors.' )
+		array( 'ndingi_card_icon' => 'people', 'ndingi_card_blurb' => 'Meet our Management Team, Trustees, and Board of Management.' )
 	);
 	$note( 'People', $c );
 
@@ -209,8 +209,19 @@ function ndingi_page_setup_run() {
 	$note( 'Management Team', $c );
 	list( , $c ) = ndingi_page_setup_create_page( 'Trustees', '', 0, 'page-team-roster.php' );
 	$note( 'Trustees', $c );
-	list( , $c ) = ndingi_page_setup_create_page( 'Board of Directors', '', 0, 'page-team-roster.php' );
-	$note( 'Board of Directors', $c );
+	// Renamed from "Board of Directors" per client feedback (2026-09-15) — if
+	// that page was already created under the old title on a host that ran
+	// this tool before the rename, update it in place instead of creating a
+	// duplicate (ndingi_page_setup_create_page() matches by exact title, so
+	// it wouldn't find the old one under the new name).
+	$board_page = ndingi_page_setup_find_by_title( 'Board of Directors', 'page' );
+	if ( $board_page ) {
+		wp_update_post( array( 'ID' => $board_page->ID, 'post_title' => 'Board of Management' ) );
+		$note( 'Board of Management', false );
+	} else {
+		list( , $c ) = ndingi_page_setup_create_page( 'Board of Management', '', 0, 'page-team-roster.php' );
+		$note( 'Board of Management', $c );
+	}
 
 	$core_values = array(
 		array( 'Empowerment', 'Building knowledge, skills, and opportunity.' ),

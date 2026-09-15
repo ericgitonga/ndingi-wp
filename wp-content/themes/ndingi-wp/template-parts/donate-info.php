@@ -17,8 +17,3 @@
 		</div>
 	</dl>
 </div>
-
-<p style="margin-top:1.5rem;font-size:0.875rem;color:var(--fg-70);">
-	A dedicated online payment platform supporting additional payment methods is in development
-	and will be added here once ready.
-</p>

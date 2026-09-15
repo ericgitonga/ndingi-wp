@@ -13,7 +13,7 @@ get_header();
 $sections = array(
 	'management' => 'Management Team',
 	'trustees'   => 'Trustees',
-	'board'      => 'Board of Directors',
+	'board'      => 'Board of Management',
 );
 ?>
 <div class="wrap">

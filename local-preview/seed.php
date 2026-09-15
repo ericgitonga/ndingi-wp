@@ -188,7 +188,7 @@ ndingi_seed_page(
 	'',
 	$about_id,
 	'page-people.php',
-	array( 'ndingi_card_icon' => 'people', 'ndingi_card_blurb' => 'Meet our Management Team, Trustees, and Board of Directors.' )
+	array( 'ndingi_card_icon' => 'people', 'ndingi_card_blurb' => 'Meet our Management Team, Trustees, and Board of Management.' )
 );
 
 $our_work_id = ndingi_seed_page( 'Our Work', '', 0, 'page-our-work.php' );
@@ -250,7 +250,7 @@ ndingi_seed_page( 'Donate', '', 0, 'page-donate.php' );
 ndingi_seed_page( 'Contact', '', 0, 'page-contact.php' );
 ndingi_seed_page( 'Management Team', '', 0, 'page-team-roster.php' );
 ndingi_seed_page( 'Trustees', '', 0, 'page-team-roster.php' );
-ndingi_seed_page( 'Board of Directors', '', 0, 'page-team-roster.php' );
+ndingi_seed_page( 'Board of Management', '', 0, 'page-team-roster.php' );
 
 echo "Seeding core values…\n";
 $core_values = array(

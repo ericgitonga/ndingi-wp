@@ -60,11 +60,17 @@ function ndingi_seed_roster_terms() {
 	$rosters = array(
 		'management' => 'Management Team',
 		'trustees'   => 'Trustees',
-		'board'      => 'Board of Directors',
+		'board'      => 'Board of Management',
 	);
 	foreach ( $rosters as $slug => $name ) {
-		if ( ! term_exists( $slug, 'ndingi_roster' ) ) {
+		$term = get_term_by( 'slug', $slug, 'ndingi_roster' );
+		if ( ! $term ) {
 			wp_insert_term( $name, 'ndingi_roster', array( 'slug' => $slug ) );
+		} elseif ( $term->name !== $name ) {
+			// Keeps a term already seeded under an old label (e.g. "Board of
+			// Directors") in sync with a renamed label here, instead of
+			// leaving it stale in the wp-admin dropdown forever.
+			wp_update_term( $term->term_id, 'ndingi_roster', array( 'name' => $name ) );
 		}
 	}
 }

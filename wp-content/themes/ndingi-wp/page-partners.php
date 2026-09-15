@@ -82,7 +82,6 @@ $professional_advisors = array(
 
 	<section style="margin-top:2.5rem;">
 		<h2 class="subsection-title" style="margin-top:0;">Programme &amp; Donor Partners</h2>
-		<p style="margin-top:0.5rem;">Additional partner organisations the Foundation works with will be listed here once their authorisation to be named and display their logo has been received.</p>
 	</section>
 </div>
 <?php get_footer(); ?>

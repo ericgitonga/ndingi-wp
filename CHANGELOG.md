@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.4.2 — 2026-09-15
+
+Three more items from Valerie's client feedback:
+
+- **Partners page** — removed the placeholder note under "Programme & Donor Partners"
+  ("Additional partner organisations… will be listed here once their authorisation…
+  has been received"); the section heading stays for when those logos are added.
+- **Donate page** — removed the "A dedicated online payment platform… is in development"
+  note from `template-parts/donate-info.php`; not meant for public visibility per the
+  client.
+- **"Board of Directors" renamed to "Board of Management"** throughout — the People page
+  section, the `ndingi_roster` taxonomy term, the roster page's title/slug handling, and
+  the Page Setup tool's page title and card blurb (`local-preview/seed.php` too, for local
+  dev). The Page Setup tool and the roster-term seeder now rename an already-created page
+  or term in place instead of creating a duplicate under the new title — verified via
+  WP-CLI against a locally-seeded "Board of Directors" page/term, which came back renamed
+  with no duplicate and its original `board-of-directors` slug still resolving correctly.
+
 ## 0.4.1 — 2026-09-15
 
 Home and About no longer show the small navbar logo alongside their large prominent logo
