@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.5 — 2026-09-15
+
+Fixed the sticky navbar breaking partway down long pages (reported on Home: scroll past "Our
+Work" and the navbar disappears instead of staying pinned). Root cause: `assets/css/main.css`
+set `html, body { height: 100%; }`, which pins `body`'s box to exactly one viewport height —
+`body`'s own `min-height: 100%` a few lines down never took effect, since `height` was already
+an explicit value, not `auto`. The sticky header's containing block is `body`, so it could only
+stay "stuck" within that first viewport's worth of scroll; past it, content kept rendering
+(via `overflow: visible`) but the header was no longer contained and just scrolled away with
+the rest of the page. Fix: `height: 100%` now applies to `html` only — `body` keeps its
+existing `min-height: 100%`, which now actually works as intended (full-height on short pages,
+grows normally on long ones). Verified via Playwright: `body`'s rendered height went from a
+fixed 900px to the page's real 2277px, and the header stayed at `top: 0` across the entire
+scroll range on both Home and Our Work.
+
 ## 0.4.4 — 2026-09-15
 
 New **Tools → Ndingi People Import** wp-admin page (same pattern as Ndingi Page Setup) —
