@@ -188,6 +188,10 @@ dd {
 	width: 12rem;
 }
 
+.site-header--no-logo .site-header__row {
+	justify-content: flex-end;
+}
+
 .prominent-logo {
 	display: block;
 	margin: 0 auto;

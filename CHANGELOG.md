@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.1 — 2026-09-15
+
+Home and About no longer show the small navbar logo alongside their large prominent logo
+(client feedback via Valerie: "remove the small logo on the home page to leave the
+big/major one"). `header.php` now skips the navbar logo on `is_front_page()` and the About
+Hub template, and shifts the nav to the right edge in its place (new
+`.site-header--no-logo` modifier in `main.css`) so the header row doesn't look
+left-anchored with nothing to balance it. Every other page is unaffected — navbar logo
+only, as before.
+
 ## 0.4.0 — 2026-09-12
 
 Fixed the live host reporting About, Our Work, and Resources as missing (500/critical

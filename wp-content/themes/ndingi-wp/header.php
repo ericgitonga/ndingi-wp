@@ -8,16 +8,24 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<header class="site-header">
+<?php
+// Home and About already show a large logo in the page body
+// (template-parts/prominent-logo.php) — the navbar logo would be
+// redundant there, so it's shown only on every other page.
+$ndingi_show_navbar_logo = ! ( is_front_page() || is_page_template( 'page-about.php' ) );
+?>
+<header class="site-header<?php echo $ndingi_show_navbar_logo ? '' : ' site-header--no-logo'; ?>">
 	<div class="site-header__row">
-		<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-			<img
-				src="<?php echo esc_url( get_theme_file_uri( '/assets/images/logo.png' ) ); ?>"
-				alt="R S Ndingi Mwana 'a Nzeki Foundation"
-				width="280"
-				height="88"
-			/>
-		</a>
+		<?php if ( $ndingi_show_navbar_logo ) : ?>
+			<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<img
+					src="<?php echo esc_url( get_theme_file_uri( '/assets/images/logo.png' ) ); ?>"
+					alt="R S Ndingi Mwana 'a Nzeki Foundation"
+					width="280"
+					height="88"
+				/>
+			</a>
+		<?php endif; ?>
 
 		<button type="button" class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="main-navigation" aria-label="Open menu">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="card-tile__icon" style="height:1.5rem;width:1.5rem;" aria-hidden="true">
