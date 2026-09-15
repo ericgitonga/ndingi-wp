@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.3 — 2026-09-15
+
+New `local-preview/import-real-people.php` — an opt-in sibling to `seed.php` that replaces the
+local preview's placeholder "Sample …" team members with the real roster pulled live from
+`ndingi-foundation`'s public Sanity dataset (same project/dataset the Next.js site reads).
+Not run automatically by `setup.sh` — `seed.php` stays offline-friendly by design — but useful
+whenever a demo or client-facing screenshot needs to show real content instead of placeholders:
+
+```bash
+php .wp-runtime/wp-cli.phar --path=.wp-runtime eval-file local-preview/import-real-people.php
+```
+
+Deletes every existing `team_member` post first, so it's safe to re-run without duplicating.
+Used to populate all 12 real Management Team/Trustees/Board of Management entries (names,
+roles, bios, photos) for a client-facing page-snapshot PDF.
+
 ## 0.4.2 — 2026-09-15
 
 Three more items from Valerie's client feedback:
