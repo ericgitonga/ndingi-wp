@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.6 — 2026-10-08
+
+Sync live site download, update `.gitignore` for WordPress core, and make `seed.php` docroot-safe (#2):
+- Update `.gitignore` to exclude WordPress core files, `wp-config.php`, default themes, and live runtime directories (`uploads/`, `languages/`, `upgrade/`, `ai1wm-backups/`), ensuring live production database credentials are never committed.
+- Guard `local-preview/seed.php` to conditionally locate `wp-load.php` in both docroot and `.wp-runtime` environments without fatal errors when run via WP-CLI.
+- Sync theme and plugin version headers to 0.4.6.
+
 ## 0.4.5 — 2026-09-15
 
 Fixed the sticky navbar breaking partway down long pages (reported on Home: scroll past "Our

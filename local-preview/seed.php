@@ -1,4 +1,11 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	if ( file_exists( __DIR__ . '/../wp-load.php' ) ) {
+		require_once __DIR__ . '/../wp-load.php';
+	} elseif ( file_exists( __DIR__ . '/../.wp-runtime/wp-load.php' ) ) {
+		require_once __DIR__ . '/../.wp-runtime/wp-load.php';
+	}
+}
 /**
  * Seeds sample content so the local preview isn't empty: the real page
  * copy from the original Next.js/Sanity site (mission, vision, programme
