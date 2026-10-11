@@ -13,16 +13,31 @@ get_header();
 
 $front_id = get_the_ID();
 
-$hero_heading  = get_post_meta( $front_id, 'ndingi_hero_heading', true ) ?: 'Empowering Communities Through Lasting Impact';
-$hero_subtext  = get_post_meta( $front_id, 'ndingi_hero_subtext', true ) ?: "The Archbishop Ndingi Mwana\u{2019}a Nzeki Foundation transforms lives across Kenya through education, sustainable community development, and climate-resilient water and ecosystem management.";
+$hero_heading   = get_post_meta( $front_id, 'ndingi_hero_heading', true ) ?: 'Empowering Communities Through Lasting Impact';
+$hero_subtext   = get_post_meta( $front_id, 'ndingi_hero_subtext', true ) ?: "The Archbishop Ndingi Mwana\u{2019}a Nzeki Foundation transforms lives across Kenya through education, sustainable community development, and climate-resilient water and ecosystem management.";
+$hero_btn1_text = get_post_meta( $front_id, 'ndingi_hero_btn1_text', true ) ?: 'Who We Are';
+$hero_btn1_url  = get_post_meta( $front_id, 'ndingi_hero_btn1_url', true ) ?: home_url( '/who-we-are/' );
+$hero_btn2_text = get_post_meta( $front_id, 'ndingi_hero_btn2_text', true ) ?: 'Our Work';
+$hero_btn2_url  = get_post_meta( $front_id, 'ndingi_hero_btn2_url', true ) ?: home_url( '/our-work/' );
+
 $intro_heading = get_post_meta( $front_id, 'ndingi_intro_heading', true ) ?: "Upholding Archbishop Ndingi\u{2019}s Vision";
 $intro_body    = get_post_meta( $front_id, 'ndingi_intro_body', true );
 $intro_paragraphs = $intro_body ? array_filter( array_map( 'trim', explode( "\n", $intro_body ) ) ) : array(
 	"The Archbishop Ndingi Mwana\u{2019}a Nzeki Foundation is committed to fostering education, community growth, and charitable endeavours inspired by Archbishop Ndingi\u{2019}s enduring legacy.",
 	"Our mission is to create lasting positive change guided by his principles and compassion, delivered through three strategic programme areas.",
 );
-$cta_heading = get_post_meta( $front_id, 'ndingi_cta_heading', true ) ?: "Honouring Archbishop Ndingi\u{2019}s Legacy";
-$cta_body    = get_post_meta( $front_id, 'ndingi_cta_body', true ) ?: "Join us in advancing education and community growth inspired by Archbishop Ndingi\u{2019}s work \u{2014} discover how you can make a difference today.";
+
+$work_title = get_post_meta( $front_id, 'ndingi_work_title', true ) ?: 'Our Work';
+$work_intro = get_post_meta( $front_id, 'ndingi_work_intro', true ) ?: "Three programme areas guided by Archbishop Ndingi\u{2019}s enduring legacy.";
+
+$cta_heading  = get_post_meta( $front_id, 'ndingi_cta_heading', true ) ?: "Honouring Archbishop Ndingi\u{2019}s Legacy";
+$cta_body     = get_post_meta( $front_id, 'ndingi_cta_body', true ) ?: "Join us in advancing education and community growth inspired by Archbishop Ndingi\u{2019}s work \u{2014} discover how you can make a difference today.";
+$cta_btn_text = get_post_meta( $front_id, 'ndingi_cta_btn_text', true ) ?: 'Discover More';
+$cta_btn_url  = get_post_meta( $front_id, 'ndingi_cta_btn_url', true ) ?: home_url( '/who-we-are/' );
+
+$contact_heading  = get_post_meta( $front_id, 'ndingi_contact_heading', true ) ?: 'Get In Touch';
+$contact_body     = get_post_meta( $front_id, 'ndingi_contact_body', true ) ?: "Have a question, a partnership idea, or want to support our work? We\u{2019}d love to hear from you.";
+$contact_btn_text = get_post_meta( $front_id, 'ndingi_contact_btn_text', true ) ?: 'Contact Us';
 
 // The three programmes are Our Work's children — reuse the same lookup
 // page-our-work.php uses, rather than a separate hardcoded slug list that
@@ -42,8 +57,8 @@ $programme_pages = $our_work_page ? ndingi_safe_get_child_pages( $our_work_page-
 		<h1><?php echo esc_html( $hero_heading ); ?></h1>
 		<p><?php echo esc_html( $hero_subtext ); ?></p>
 		<div class="hero__actions">
-			<a class="btn btn-inverse" href="<?php echo esc_url( home_url( '/who-we-are/' ) ); ?>">Who We Are</a>
-			<a class="btn btn-outline-inverse" href="<?php echo esc_url( home_url( '/our-work/' ) ); ?>">Our Work</a>
+			<a class="btn btn-inverse" href="<?php echo esc_url( $hero_btn1_url ); ?>"><?php echo esc_html( $hero_btn1_text ); ?></a>
+			<a class="btn btn-outline-inverse" href="<?php echo esc_url( $hero_btn2_url ); ?>"><?php echo esc_html( $hero_btn2_text ); ?></a>
 		</div>
 	</div>
 </section>
@@ -54,13 +69,18 @@ $programme_pages = $our_work_page ? ndingi_safe_get_child_pages( $our_work_page-
 		<?php foreach ( $intro_paragraphs as $paragraph ) : ?>
 			<p><?php echo esc_html( $paragraph ); ?></p>
 		<?php endforeach; ?>
+		<?php
+		if ( get_the_content() ) :
+			the_content();
+		endif;
+		?>
 	</div>
 </section>
 
 <section class="section section--tint">
 	<div class="wrap-5xl">
-		<h2 class="page-title" style="text-align:center;">Our Work</h2>
-		<p class="section__intro">Three programme areas guided by Archbishop Ndingi&rsquo;s enduring legacy.</p>
+		<h2 class="page-title" style="text-align:center;"><?php echo esc_html( $work_title ); ?></h2>
+		<p class="section__intro"><?php echo esc_html( $work_intro ); ?></p>
 
 		<div class="home-card-grid">
 			<?php foreach ( $programme_pages as $page ) :
@@ -90,15 +110,15 @@ $programme_pages = $our_work_page ? ndingi_safe_get_child_pages( $our_work_page-
 	<div class="section__cta">
 		<h2 class="page-title" style="color:inherit;"><?php echo esc_html( $cta_heading ); ?></h2>
 		<p><?php echo esc_html( $cta_body ); ?></p>
-		<a class="btn btn-inverse" href="<?php echo esc_url( home_url( '/who-we-are/' ) ); ?>">Discover More</a>
+		<a class="btn btn-inverse" href="<?php echo esc_url( $cta_btn_url ); ?>"><?php echo esc_html( $cta_btn_text ); ?></a>
 	</div>
 </section>
 
 <section class="section section--center">
 	<div class="section__cta">
-		<h2 class="page-title">Get In Touch</h2>
-		<p>Have a question, a partnership idea, or want to support our work? We&rsquo;d love to hear from you.</p>
-		<button type="button" class="btn btn-primary" data-open-modal="ndingi-contact-modal">Contact Us</button>
+		<h2 class="page-title"><?php echo esc_html( $contact_heading ); ?></h2>
+		<p><?php echo esc_html( $contact_body ); ?></p>
+		<button type="button" class="btn btn-primary" data-open-modal="ndingi-contact-modal"><?php echo esc_html( $contact_btn_text ); ?></button>
 	</div>
 </section>
 

@@ -24,6 +24,11 @@ $parent = get_post( wp_get_post_parent_id( get_the_ID() ) );
 	);
 	?>
 	<h1 class="page-title"><?php the_title(); ?></h1>
+	<?php if ( has_post_thumbnail() ) : ?>
+		<div style="margin:1.5rem 0 2rem;overflow:hidden;border-radius:0.5rem;">
+			<?php the_post_thumbnail( 'large', array( 'style' => 'width:100%;height:auto;display:block;' ) ); ?>
+		</div>
+	<?php endif; ?>
 	<div class="prose"><?php the_content(); ?></div>
 </div>
 <?php get_footer(); ?>

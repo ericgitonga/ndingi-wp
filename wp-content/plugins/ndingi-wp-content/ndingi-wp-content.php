@@ -22,3 +22,5 @@ require_once NDINGI_CONTENT_DIR . 'includes/front-page-meta.php';
 require_once NDINGI_CONTENT_DIR . 'includes/contact-form-handler.php';
 require_once NDINGI_CONTENT_DIR . 'includes/page-setup.php';
 require_once NDINGI_CONTENT_DIR . 'includes/people-import.php';
+require_once NDINGI_CONTENT_DIR . 'includes/donate-meta.php';
+require_once NDINGI_CONTENT_DIR . 'includes/partners-meta.php';

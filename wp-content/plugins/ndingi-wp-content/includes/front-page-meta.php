@@ -11,18 +11,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function ndingi_front_page_fields() {
 	return array(
-		'ndingi_hero_heading'  => array( 'label' => 'Hero heading', 'type' => 'text' ),
-		'ndingi_hero_subtext'  => array( 'label' => 'Hero subtext', 'type' => 'textarea' ),
-		'ndingi_intro_heading' => array( 'label' => 'Intro heading', 'type' => 'text' ),
-		'ndingi_intro_body'    => array( 'label' => 'Intro body (one paragraph per line)', 'type' => 'textarea' ),
-		'ndingi_cta_heading'   => array( 'label' => 'Legacy CTA heading', 'type' => 'text' ),
-		'ndingi_cta_body'      => array( 'label' => 'Legacy CTA body', 'type' => 'textarea' ),
+		'ndingi_hero_heading'     => array( 'label' => 'Hero heading', 'type' => 'text' ),
+		'ndingi_hero_subtext'     => array( 'label' => 'Hero subtext', 'type' => 'textarea' ),
+		'ndingi_hero_btn1_text'   => array( 'label' => 'Hero primary button text (default: Who We Are)', 'type' => 'text' ),
+		'ndingi_hero_btn1_url'    => array( 'label' => 'Hero primary button URL (default: /who-we-are/)', 'type' => 'text' ),
+		'ndingi_hero_btn2_text'   => array( 'label' => 'Hero secondary button text (default: Our Work)', 'type' => 'text' ),
+		'ndingi_hero_btn2_url'    => array( 'label' => 'Hero secondary button URL (default: /our-work/)', 'type' => 'text' ),
+		'ndingi_intro_heading'    => array( 'label' => 'Intro heading', 'type' => 'text' ),
+		'ndingi_intro_body'       => array( 'label' => 'Intro body (one paragraph per line)', 'type' => 'textarea' ),
+		'ndingi_work_title'       => array( 'label' => 'Our Work section heading (default: Our Work)', 'type' => 'text' ),
+		'ndingi_work_intro'       => array( 'label' => 'Our Work section intro blurb', 'type' => 'textarea' ),
+		'ndingi_cta_heading'      => array( 'label' => 'Legacy CTA heading', 'type' => 'text' ),
+		'ndingi_cta_body'         => array( 'label' => 'Legacy CTA body', 'type' => 'textarea' ),
+		'ndingi_cta_btn_text'     => array( 'label' => 'Legacy CTA button text (default: Discover More)', 'type' => 'text' ),
+		'ndingi_cta_btn_url'      => array( 'label' => 'Legacy CTA button URL (default: /who-we-are/)', 'type' => 'text' ),
+		'ndingi_contact_heading'  => array( 'label' => 'Get In Touch section heading (default: Get In Touch)', 'type' => 'text' ),
+		'ndingi_contact_body'     => array( 'label' => 'Get In Touch body text', 'type' => 'textarea' ),
+		'ndingi_contact_btn_text' => array( 'label' => 'Get In Touch button text (default: Contact Us)', 'type' => 'text' ),
 	);
 }
 
 function ndingi_front_page_metabox() {
+	global $post;
+	if ( ! $post || 'page' !== $post->post_type ) {
+		return;
+	}
 	$front_page_id = (int) get_option( 'page_on_front' );
-	if ( ! $front_page_id ) {
+	$is_front      = ( $front_page_id && $front_page_id === $post->ID );
+	$is_home_slug  = ( 'home' === $post->post_name );
+	if ( ! $is_front && ! $is_home_slug ) {
 		return;
 	}
 	add_meta_box(
@@ -37,7 +54,10 @@ function ndingi_front_page_metabox() {
 add_action( 'add_meta_boxes', 'ndingi_front_page_metabox' );
 
 function ndingi_render_front_page_metabox( $post ) {
-	if ( (int) get_option( 'page_on_front' ) !== $post->ID ) {
+	$front_page_id = (int) get_option( 'page_on_front' );
+	$is_front      = ( $front_page_id && $front_page_id === $post->ID );
+	$is_home_slug  = ( 'home' === $post->post_name );
+	if ( ! $is_front && ! $is_home_slug ) {
 		return;
 	}
 	wp_nonce_field( 'ndingi_save_front_page', 'ndingi_front_page_nonce' );

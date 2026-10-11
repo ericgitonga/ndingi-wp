@@ -12,6 +12,11 @@ get_header();
 ?>
 <div class="wrap">
 	<h1 class="page-title"><?php the_title(); ?></h1>
+	<?php if ( get_the_content() ) : ?>
+		<div class="prose" style="margin-bottom:2rem;">
+			<?php the_content(); ?>
+		</div>
+	<?php endif; ?>
 	<div class="card-grid card-grid--2">
 		<?php foreach ( ndingi_safe_get_core_values() as $value ) : ?>
 			<div class="advisor-card">
