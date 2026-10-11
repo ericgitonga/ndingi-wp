@@ -15,8 +15,12 @@ $children = ndingi_safe_get_child_pages( get_the_ID() );
 <div class="wrap-4xl">
 	<h1 class="page-title"><?php the_title(); ?></h1>
 	<div class="prose" style="max-width:42rem;">
-		<p>Three programme areas guided by Archbishop Ndingi&rsquo;s enduring legacy. Select a
-		programme to learn more.</p>
+		<?php if ( get_the_content() ) : ?>
+			<?php the_content(); ?>
+		<?php else : ?>
+			<p>Three programme areas guided by Archbishop Ndingi&rsquo;s enduring legacy. Select a
+			programme to learn more.</p>
+		<?php endif; ?>
 	</div>
 
 	<div class="card-grid card-grid--3" id="our-work-grid">

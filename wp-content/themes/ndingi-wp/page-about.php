@@ -17,6 +17,12 @@ $children = ndingi_safe_get_child_pages( get_the_ID() );
 <div class="wrap">
 	<?php get_template_part( 'template-parts/prominent-logo' ); ?>
 
+	<?php if ( get_the_content() ) : ?>
+		<div class="prose" style="margin-top:2rem;margin-bottom:2rem;text-align:center;">
+			<?php the_content(); ?>
+		</div>
+	<?php endif; ?>
+
 	<div class="card-grid card-grid--2">
 		<?php foreach ( $children as $child ) :
 			$icon  = get_post_meta( $child->ID, 'ndingi_card_icon', true );
