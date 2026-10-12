@@ -123,7 +123,7 @@ $donor_partners = function_exists( 'ndingi_get_donor_partners' )
 							<p style="margin-top:0.5rem;font-size:0.875rem;color:var(--fg-80);"><?php echo esc_html( $p_blurb ); ?></p>
 						<?php endif; ?>
 						<?php if ( $p_link ) : ?>
-							<a href="<?php echo esc_url( $p_link ); ?>" style="margin-top:auto;padding-top:0.5rem;" target="_blank" rel="noopener noreferrer">Visit Website &rarr;</a>
+							<a href="<?php echo esc_url( $p_link ); ?>" style="margin-top:auto;padding-top:0.5rem;" target="_blank" rel="noopener noreferrer"><?php echo esc_html( ! empty( $partner['link_label'] ) ? $partner['link_label'] : 'Visit Website &rarr;' ); ?></a>
 						<?php endif; ?>
 					</div>
 				<?php endforeach; ?>
