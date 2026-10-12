@@ -248,6 +248,69 @@ function ndingi_page_setup_run() {
 		$created[] = "Core Value: {$name}";
 	}
 
+	$default_advisors_data = array(
+		array(
+			'name'     => 'NIC Bank',
+			'category' => 'Bankers',
+			'details'  => "The Mall, Westlands Branch, Nairobi",
+			'url'      => '',
+			'order'    => 0,
+		),
+		array(
+			'name'     => 'Caritas Microfinance Bank',
+			'category' => 'Bankers',
+			'details'  => "Cardinal Otunga Plaza Branch, Nairobi",
+			'url'      => '',
+			'order'    => 1,
+		),
+		array(
+			'name'     => 'Kigundu & Company',
+			'category' => 'Auditors',
+			'details'  => "Certified Public Accountants (Kenya)\nP.O. Box 2309-00606, Sarit Centre, Nairobi",
+			'url'      => '',
+			'order'    => 2,
+		),
+		array(
+			'name'     => 'Taxwise Africa Consulting LLP',
+			'category' => 'Tax Consultants',
+			'details'  => "9th Floor Barclays Plaza, Loita Street\nP.O. Box 9539-00100, Nairobi",
+			'url'      => 'https://www.taxwise-consulting.com',
+			'order'    => 3,
+		),
+		array(
+			'name'     => 'Nyiha, Mukoma & Company Advocates',
+			'category' => 'Lawyers',
+			'details'  => "Old Mutual Building, 3rd Floor, Kimathi Street\nP.O. Box 28491-00200, Nairobi",
+			'url'      => '',
+			'order'    => 4,
+		),
+	);
+
+	foreach ( $default_advisors_data as $adv ) {
+		if ( ndingi_page_setup_find_by_title( $adv['name'], 'partner' ) ) {
+			$existing[] = "Partner: {$adv['name']}";
+			continue;
+		}
+		$adv_id = wp_insert_post(
+			array(
+				'post_type'    => 'partner',
+				'post_title'   => $adv['name'],
+				'post_excerpt' => $adv['details'],
+				'post_status'  => 'publish',
+				'menu_order'   => $adv['order'],
+			)
+		);
+		if ( $adv_id && ! is_wp_error( $adv_id ) ) {
+			update_post_meta( $adv_id, 'ndingi_partner_details', $adv['details'] );
+			if ( ! empty( $adv['url'] ) ) {
+				update_post_meta( $adv_id, 'ndingi_partner_url', $adv['url'] );
+				update_post_meta( $adv_id, 'ndingi_partner_url_label', $adv['url'] );
+			}
+			wp_set_object_terms( $adv_id, $adv['category'], 'partner_category' );
+			$created[] = "Partner: {$adv['name']}";
+		}
+	}
+
 	return array(
 		'created'  => $created,
 		'existing' => $existing,
