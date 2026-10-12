@@ -105,22 +105,37 @@ function ndingi_render_publication_link_metabox( $post ) {
 	</p>
 
 	<script>
-	(function () {
+	jQuery(function ($) {
 		var button = document.getElementById('ndingi_upload_file_button');
-		if (!button || typeof wp === 'undefined' || !wp.media) return;
+		if (!button) return;
 		var frame;
 		button.addEventListener('click', function (e) {
 			e.preventDefault();
-			if (frame) { frame.open(); return; }
-			frame = wp.media({ title: 'Select a file', button: { text: 'Use this file' }, multiple: false });
+			if (typeof wp === 'undefined' || !wp.media) {
+				return;
+			}
+			if (frame) {
+				frame.open();
+				return;
+			}
+			frame = wp.media({
+				title: 'Select a file',
+				button: { text: 'Use this file' },
+				multiple: false
+			});
 			frame.on('select', function () {
 				var attachment = frame.state().get('selection').first().toJSON();
 				document.getElementById('ndingi_file_id').value = attachment.id;
-				document.getElementById('ndingi_file_name').textContent = attachment.filename || attachment.url;
+				document.getElementById('ndingi_file_name').textContent = attachment.filename || attachment.title || attachment.url;
+				button.textContent = 'Replace file';
+				var fileRadio = document.querySelector('input[name="ndingi_link_type"][value="file"]');
+				if (fileRadio) {
+					fileRadio.checked = true;
+				}
 			});
 			frame.open();
 		});
-	})();
+	});
 	</script>
 	<?php
 }
@@ -151,8 +166,13 @@ function ndingi_save_publication_link( $post_id ) {
 add_action( 'save_post_publication', 'ndingi_save_publication_link' );
 
 function ndingi_publication_link_enqueue( $hook ) {
+	if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
+		return;
+	}
+	$screen = get_current_screen();
+	$screen_post_type = $screen ? $screen->post_type : '';
 	global $post_type;
-	if ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) && 'publication' === $post_type ) {
+	if ( 'publication' === $screen_post_type || 'publication' === $post_type ) {
 		wp_enqueue_media();
 	}
 }
